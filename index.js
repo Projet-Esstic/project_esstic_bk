@@ -4,7 +4,7 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const process = require('process');
 require('dotenv').config();
-const candidateRouter = require('./src/routers/candidateRouter'); // Adjust the path as necessary
+const candidateRouter = require('./src/routes/candidateRouter'); // Adjust the path as necessary
 
 const cwd = process.cwd();
 
