@@ -22,6 +22,7 @@ const SubjectSchema = mongoose.Schema({
         required: [true, "Please provide a coefficient for the subject"],
     }
 },
+// allow us to update the schema in the future with ease
 { timestamps: true },
 );
 

@@ -13,7 +13,7 @@ import Subject from '../models/Subject.mjs';
  */
 export const getSubjects = async (req, res) => {
     try {
-        const subjects = await Subject.find();
+        const subjects = await Subject.find({});
         res.status(200).json({
             size: subjects.length,
             subjects: subjects
