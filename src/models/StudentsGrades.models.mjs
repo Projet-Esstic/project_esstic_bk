@@ -1,33 +1,43 @@
+
 /**
- * Ce modèle correspond au informations sur un étudiant et ses notes.
- * 
- * Schéma des enregistrements.
- * {
-        studentName: "",
-        marks : {
-            subjectName: ,
-            totalMark: ,
-            mark: ,
-            coefficient: ,
-        }
-    },
+ * @description Modèle Mongoose pour les notes des étudiants.
  */
 
 import mongoose from 'mongoose';
 
+/**
+ * Schéma Mongoose pour les notes des étudiants.
+ * 
+ * @typedef {Object} StudentsGradeSchema
+ * @property {String} studentName - Nom de l'étudiant. Obligatoire.
+ * @property {String} studentRegion - Région de l'étudiant. Obligatoire.
+ * @property {String} studentGender - Genre de l'étudiant. Par défaut "M".
+ * @property {Object} mark - Détails de la note.
+ * @property {String} mark.subjectName - Nom de la matière. Obligatoire.
+ * @property {Number} mark.totalMark - Note totale. Par défaut 20.
+ * @property {Number} mark.mark - Note obtenue par l'étudiant. Obligatoire.
+ * @property {Number} mark.coefficient - Coefficient de la matière. Par défaut 20.
+ * @property {Date} createdAt - Date de création du document. Géré automatiquement par Mongoose.
+ * @property {Date} updatedAt - Date de mise à jour du document. Géré automatiquement par Mongoose.
+ */
+
 const StudentsGradeSchema = mongoose.Schema({
     studentName: {
         type: String,
-        require: [true, "Please provide a name for the student"],
+        require: [true, "Veuillez fournir un nom pour l'étudiant"],
     },
     studentRegion: {
         type: String,
-        require: [true, "Please provide the region name"],
+        require: [true, "Veuillez fournir le nom de la région"],
+    },
+    studentGender: {
+        type: String,
+        default: "M",
     },
     mark: {
         subjectName: {
             type: String,
-            require: [true, "Please provide the name of the subject"],
+            require: [true, "Veuillez fournir le nom de la matière"],
         },
         totalMark: {
             type: Number,
@@ -35,14 +45,23 @@ const StudentsGradeSchema = mongoose.Schema({
         },
         mark: {
             type: Number,
-            require: [true, "Please provide a mark the mark that the student had"]
+            require: [true, "Veuillez fournir la note que l'étudiant a obtenue"]
         },
         coefficient: {
             type: Number,
             default: 20,
         }
     }
-});
+}, 
+{ timestamps: true }
+);
+
+/**
+ * Modèle Mongoose pour les notes des étudiants.
+ * 
+ * @typedef {Object} studentsGrade
+ * @property {StudentsGradeSchema} StudentsGradeSchema - Schéma des notes des étudiants.
+ */
 
 const studentsGrade = mongoose.model("studentsGrade", StudentsGradeSchema);
 
