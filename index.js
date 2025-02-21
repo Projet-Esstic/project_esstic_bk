@@ -1,55 +1,31 @@
-const express = require('express')
-const mongoose = require('mongoose')
-const bodyParser = require('body-parser')
-const cors = require('cors')
-const process = require('process');
-require('dotenv').config();
-const candidateRouter = require('./src/routes/candidateRouter'); // Adjust the path as necessary
+import express from "express";
+import "dotenv/config";
+import { notFound } from "./src/middlewares/notFound.middlewares.mjs";
+import route from "./src/routes/Subject.routes.mjs";
+import "express-async-errors";
 
-const cwd = process.cwd();
+const app = express();
 
-var app = express();
+// -------------- routes -----------------------
+app.use('/api/v1/exam/', route);
 
-const allowedOrigins = [
-    'http://localhost:3000', 'http://172.20.10.4:3000',
-];
+//--------------- middlewares ----------------------
+app.use(express.json());
+app.use(express.urlencoded( {extended: true }));
+app.use(notFound);
 
-// CORS options
-const corsOptions = {
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    methods: ["GET", "POST", "DELETE", "PATCH", "PUT"]
-};
-app.use(cors(corsOptions));
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
 
-let url = process.env.MONGODB_URL
+const port = process.env.PORT || 3000;
 
-mongoose.connect(url)
-    .then((con) => {
-        console.log("Connected to the db")
+const start = async () => {
+    try {
+        // start the server
+        app.listen(port, () => {
+            console.log(`Server listening at http://localhost:${port}`);
+        });
+    } catch (error) {
+        console.log(error);
     }
-    )
-    .catch(err => { console.log(err) })
+};
 
-
-app.get("/", (req, res) => {
-    return res.send("Welcome to Esstic Project Backend")
-})
-
-app.use('/api/candidats', candidateRouter);
-
-app.get("*", (req, res) => {
-    return res.send("Not found")
-})
-
-
-let server = app.listen(5000, async () => {
-    console.log("Server running on port 5000");
-})
+start();
