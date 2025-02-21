@@ -21,7 +21,9 @@ const SubjectSchema = mongoose.Schema({
         type: Number,
         required: [true, "Please provide a coefficient for the subject"],
     }
-});
+},
+{ timestamps: true },
+);
 
 const Subject = mongoose.model("Subject", SubjectSchema);
 
