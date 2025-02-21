@@ -1,55 +1,75 @@
-const express = require('express')
-const mongoose = require('mongoose')
-const bodyParser = require('body-parser')
-const cors = require('cors')
-const process = require('process');
-require('dotenv').config();
-const candidateRouter = require('./src/routers/candidateRouter'); // Adjust the path as necessary
+/**
+ * @fileoverview Fichier principal pour démarrer l'application Express.
+ * 
+ * @requires express
+ * @requires dotenv/config
+ * @requires ./src/middlewares/notFound.middlewares.mjs
+ * @requires ./src/routes/Subject.routes.mjs
+ * @requires express-async-errors
+ * 
+ * @description Ce fichier configure et démarre un serveur Express. 
+ * Il importe les modules nécessaires, configure les routes et les middlewares, 
+ * et démarre le serveur sur le port spécifié dans les variables d'environnement ou sur le port 3000 par défaut.
+ * 
+ * @module index
+ */
+import express from "express";
+import "dotenv/config";
+import { notFound } from "./src/middlewares/notFound.middlewares.mjs";
+import route from "./src/routes/Subject.routes.mjs";
+import "express-async-errors";
 
-const cwd = process.cwd();
 
-var app = express();
+/**
+ * Application Express.
+ * @const {Object} app
+ * @memberof module:index
+ */
+const app = express();
 
-const allowedOrigins = [
-    'http://localhost:3000', 'http://172.20.10.4:3000',
-];
+// -------------- routes -----------------------
 
-// CORS options
-const corsOptions = {
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    methods: ["GET", "POST", "DELETE", "PATCH", "PUT"]
-};
-app.use(cors(corsOptions));
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+/**
+ * Routeur pour les sujets d'examen.
+ * @name route
+ * @function
+ * @memberof module:index
+ */
+app.use('/api/v1/exam/', route);
 
-let url = process.env.MONGODB_URL
+//--------------- middlewares ----------------------
+app.use(express.json());
+app.use(express.urlencoded( {extended: true }));
+/**
+ * Middleware pour gérer les routes non trouvées.
+ * @name notFound
+ * @function
+ * @memberof module:index
+ */
+app.use(notFound);
 
-mongoose.connect(url)
-    .then((con) => {
-        console.log("Connected to the db")
+/**
+ * Port sur lequel le serveur écoute.
+ * @const {number|string} port
+ * @memberof module:index
+ */
+const port = process.env.PORT || 3000;
+
+/**
+ * Fonction asynchrone pour démarrer le serveur.
+ * @async
+ * @function start
+ * @memberof module:index
+ */
+const start = async () => {
+    try {
+        // start the server
+        app.listen(port, () => {
+            console.log(`Server listening at http://localhost:${port}`);
+        });
+    } catch (error) {
+        console.log(error);
     }
-    )
-    .catch(err => { console.log(err) })
+};
 
-
-app.get("/", (req, res) => {
-    return res.send("Welcome to Esstic Project Backend")
-})
-
-app.use('/api/candidats', candidateRouter);
-
-app.get("*", (req, res) => {
-    return res.send("Not found")
-})
-
-
-let server = app.listen(5000, async () => {
-    console.log("Server running on port 5000");
-})
+start();

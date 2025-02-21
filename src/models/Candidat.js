@@ -1,41 +1,68 @@
-const mongoose = require("mongoose");
+import mongoose, { model } from "mongoose";
 const { Schema } = mongoose;
 
 const CandidateSchema = new Schema({
     etat_civil: {
-        nom: { type: String, require: true },
-        pernom: { type: String, require: true },
-        dateDeNaissance: { type: Date, require: true },
-        lieuDeNaissance: { type: String, require: true },
+        nom: { 
+            type: String, 
+            require: true
+         },
+        pernom: { 
+            type: String, 
+            require: true 
+        },
+        dateDeNaissance: { 
+            type: Date, 
+            require: true 
+        },
+        lieuDeNaissance: { 
+            type: String, 
+            require: true 
+        },
         situationDeFamille: {
             type: String,
             enum: ['Célibataire', 'Marié', "Veuf ou divorcé"],
             require: true
         },
-        residenceHabituelle: { type: String, require: true },
-        boitePostale: { type: String, require: true },
-        numeroDeTelephone: { type: String, require: true },
-        referencesFamilales: {
-            nom_pere: { type: String, require: true },
-            nom_mere: { type: String, require: true },
+        residenceHabituelle: { 
+            type: String, 
+            require: true 
         },
-        addressParents: { type: String, require: true },
-        paysdOrigine: { type: String, require: true },
-        region: { type: String, require: true },
-        departementdOrigine: { type: String, require: true },
+        boitePostale: { 
+            type: String, 
+            require: true 
+        },
+        numeroDeTelephone: { 
+            type: String, 
+            require: true 
+        },
+        referencesFamilales: {
+            nom_pere: { 
+                type: String, 
+                require: true 
+            },
+            nom_mere: { 
+                type: String, 
+                require: true
+            },
+        },
+        addressParents: { 
+            type: String, 
+            require: true 
+        },
+        paysdOrigine: { 
+            type: String, 
+            require: true 
+        },
+        region: { 
+            type: String, 
+            require: true 
+        },
+        departementdOrigine: { 
+            type: String, 
+            require: true 
+        },
 
-
-        // email: {
-        //     type: String,
-        //     require: true,
-        //     match: /.+\@.+\..+/, // Simple regex for email validation
-        //     unique: true
-        // },
-        // password: {
-        //     type: String,
-        //     default: null
-        // },
-        // passwordString: { type: String, require: true },
 
     },
     etudesEtDipomesObtenus: {
@@ -115,5 +142,5 @@ const CandidateSchema = new Schema({
     },
 });
 
-const Candidate = mongoose.model('CandidatModel', CandidateSchema);
-module.exports = Candidate;
+const Candidate = model('CandidatModel', CandidateSchema);
+export default Candidate;
